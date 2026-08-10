@@ -41,3 +41,7 @@ RUN curl -fsSL -o /tmp/zen.tar.xz \
 
 ENV LD_LIBRARY_PATH=/opt/zen
 RUN echo "LD_LIBRARY_PATH=/opt/zen" >> /etc/environment
+
+COPY docker/startwm.sh /etc/xrdp/startwm.sh
+COPY docker/openbox-autostart /etc/xdg/openbox/autostart
+RUN chmod +x /etc/xrdp/startwm.sh /etc/xdg/openbox/autostart
