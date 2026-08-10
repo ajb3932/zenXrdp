@@ -10,6 +10,7 @@ echo "rdpuser:${RDP_PASSWORD}" | chpasswd
 mkdir -p /home/rdpuser/.zen /home/rdpuser/Downloads
 chown -R rdpuser:rdpuser /home/rdpuser/.zen /home/rdpuser/Downloads
 
+rm -rf /run/dbus /run/xrdp
 mkdir -p /run/dbus /run/xrdp /run/xrdp/sockdir
 chown root:xrdp /run/xrdp /run/xrdp/sockdir
 chmod 2775 /run/xrdp

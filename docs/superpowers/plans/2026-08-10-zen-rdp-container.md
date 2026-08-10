@@ -240,6 +240,8 @@ git commit -m "Launch Openbox from xrdp and auto-start Zen on session start"
 - A full integration run (`dbus-daemon --system --fork`; `xrdp-sesman --nodaemon &`; `exec xrdp --nodaemon`) was built and started as a real container during planning: all three processes stayed up, `/var/log/xrdp.log` showed `listening to port 3389 on 0.0.0.0`, and a raw TCP connection to `127.0.0.1:3389` was accepted and logged (`Using default X.509 certificate: /etc/xrdp/cert.pem` — confirming the cert from Task 1 is picked up with no extra config).
 - No `trap`-based multi-process shutdown handling is needed: Docker tears down every process in the container's namespace together on `stop`/`kill`, and this container holds no state that a hard stop could corrupt (browser profile and downloads live on the two volumes, not in daemon memory).
 
+**Deviation found during Task 6 (end-to-end test):** `docker restart` (as opposed to a fresh `docker run`) reuses the container's existing writable layer, and `/run` is **not** an automatic fresh tmpfs across that restart the way it would be across a VM reboot. A stale `/run/dbus/pid` from the previous run caused `dbus-daemon --system --fork` to fail on every subsequent restart ("The pid file ... exists"), which combined with `restart: unless-stopped` produced a crash loop. Fixed by having the entrypoint `rm -rf /run/dbus /run/xrdp` before recreating them, so each start gets clean runtime state regardless of whether it's a fresh container or a restart of an existing one.
+
 - [ ] **Step 1: Write `docker/entrypoint.sh`**
 
 ```bash
@@ -255,6 +257,7 @@ echo "rdpuser:${RDP_PASSWORD}" | chpasswd
 mkdir -p /home/rdpuser/.zen /home/rdpuser/Downloads
 chown -R rdpuser:rdpuser /home/rdpuser/.zen /home/rdpuser/Downloads
 
+rm -rf /run/dbus /run/xrdp
 mkdir -p /run/dbus /run/xrdp /run/xrdp/sockdir
 chown root:xrdp /run/xrdp /run/xrdp/sockdir
 chmod 2775 /run/xrdp
