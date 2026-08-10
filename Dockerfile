@@ -45,3 +45,10 @@ RUN echo "LD_LIBRARY_PATH=/opt/zen" >> /etc/environment
 COPY docker/startwm.sh /etc/xrdp/startwm.sh
 COPY docker/openbox-autostart /etc/xdg/openbox/autostart
 RUN chmod +x /etc/xrdp/startwm.sh /etc/xdg/openbox/autostart
+
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+EXPOSE 3389
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
