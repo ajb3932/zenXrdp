@@ -10,9 +10,9 @@ desktop, reachable over RDP.
    ```bash
    mkdir -p /zen/data /zen/downloads
    ```
-3. Start the container:
+3. Start the container (pulls `ajb3932/zenxrdp:latest` from Docker Hub):
    ```bash
-   docker compose up -d --build
+   docker compose up -d
    ```
 4. Connect with any RDP client to `<host>:3390`, username `rdpuser`,
    password whatever you set `RDP_PASSWORD` to.

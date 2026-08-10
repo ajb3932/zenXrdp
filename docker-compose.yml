@@ -1,6 +1,6 @@
 services:
   zen:
-    build: .
+    image: ajb3932/zenxrdp:latest
     ports:
       - "3390:3389"
     environment:
