@@ -322,7 +322,7 @@ services:
   zen:
     build: .
     ports:
-      - "3389:3389"
+      - "3390:3389"
     environment:
       - RDP_PASSWORD=changeme
     volumes:
@@ -330,6 +330,13 @@ services:
       - /zen/downloads:/home/rdpuser/Downloads
     restart: unless-stopped
 ```
+
+**Deviation from the original design doc:** the host publishes on
+**3390**, not 3389. Discovered during Task 4 execution: this host
+already runs its own native `xrdp` service bound to 3389 (with an
+active session), so `-p 3389:3389` fails with "address already in
+use". Confirmed with the user, who chose to publish on a different
+host port instead. The container's internal port is still 3389.
 
 - [ ] **Step 2: Write `.dockerignore`**
 
