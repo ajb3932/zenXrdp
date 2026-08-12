@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libasound2 \
         libdbus-1-3 \
         libxcb-shm0 \
+        ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL -o /tmp/zen.tar.xz \
